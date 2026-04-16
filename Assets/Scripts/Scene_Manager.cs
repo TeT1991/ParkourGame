@@ -1,39 +1,37 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿// Scripts/Scene_Manager.cs
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Scene_Manager : MonoBehaviour
 {
-    int Saved_scene;
-    int Scene_index;
+    private const string SaveKey = "Saved";
 
-    public void new_game()
+    public void NewGame()
     {
         SceneManager.LoadSceneAsync(1);
     }
 
-    public void Load_Saved_Scene()
+    public void LoadSavedScene()
     {
-        Saved_scene = PlayerPrefs.GetInt("Saved");
-
-        if(Saved_scene != 0)
-            SceneManager.LoadSceneAsync(Saved_scene);
-        else
-            return;
+        int savedScene = PlayerPrefs.GetInt(SaveKey, 0);
+        if (savedScene != 0)
+            SceneManager.LoadSceneAsync(savedScene);
     }
 
-    public void Save_and_Exit()
+    public void SaveAndExit()
     {
-        Scene_index = SceneManager.GetActiveScene().buildIndex;
-        PlayerPrefs.SetInt("Saved", Scene_index);
+        int currentIndex = SceneManager.GetActiveScene().buildIndex;
+        PlayerPrefs.SetInt(SaveKey, currentIndex);
         PlayerPrefs.Save();
+
+        // Для YG2 замени PlayerPrefs на: YG2.SavesData.saves.savedScene = currentIndex; YG2.SaveProgress();
+
         SceneManager.LoadSceneAsync(0);
     }
-        
-    public void Next_Scene()
+
+    public void NextScene()
     {
-        Scene_index = SceneManager.GetActiveScene().buildIndex + 1;
-        SceneManager.LoadSceneAsync(Scene_index);
+        int nextIndex = SceneManager.GetActiveScene().buildIndex + 1;
+        SceneManager.LoadSceneAsync(nextIndex);
     }
 }

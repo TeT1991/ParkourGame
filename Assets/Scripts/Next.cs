@@ -1,37 +1,38 @@
+// Scripts/Next.cs
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Next : MonoBehaviour
 {
-    public GameObject Player;
-    public GameObject nextfx;
-    public GameObject Camera;
+    [SerializeField] private GameObject player;
+    [SerializeField] private GameObject nextFX;     // объект с именем "2"
+    [SerializeField] private GameObject fpsCamera;  // "FirstPersonCharacter"
 
-    void Start()
+    private void Start()
     {
-        Player.SetActive(true);
-        nextfx = GameObject.Find("2");
-        Camera = GameObject.Find("FirstPersonCharacter");
-        nextfx.SetActive(false);
+        player.SetActive(true);
+
+        if (nextFX == null) nextFX = GameObject.Find("2");
+        if (fpsCamera == null) fpsCamera = GameObject.Find("FirstPersonCharacter");
+
+        nextFX.SetActive(false);
     }
 
-        void OnTriggerEnter(Collider target)
+    private void OnTriggerEnter(Collider other)
     {
-        if (target.tag == "Player")
+        if (other.CompareTag("Player"))
         {
-            StartCoroutine(ExampleCoroutine());
-            nextfx.SetActive(true);
-            Camera.SetActive(false);
+            nextFX.SetActive(true);
+            fpsCamera.SetActive(false);
+            StartCoroutine(LoadNextScene());
         }
     }
 
-    IEnumerator ExampleCoroutine()
+    private IEnumerator LoadNextScene()
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(1f);
+        AdsManager.Instance.ShowFullscreenAd();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-        GameDistribution.Instance.ShowAd();
     }
-
 }

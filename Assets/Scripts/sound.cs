@@ -1,31 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
+// Scripts/sound.cs
 using UnityEngine;
 
 public class sound : MonoBehaviour
 {
-    public bool soundfxnext = false;
-    public bool soundfxhit = false;
-    public AudioSource Hit;
-    public AudioSource Next;
-    void Start()
-    {
+    public bool soundFXNext = false;
+    public bool soundFXHit = false;
 
-    }
+    [SerializeField] private AudioSource hitSound;
+    [SerializeField] private AudioSource nextSound;
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if (soundfxhit = true)
+        // Было: if (soundfxhit = true) — это ПРИСВАИВАНИЕ, звук играл всегда!
+        if (soundFXHit)
         {
-            Hit.Play();
-            soundfxhit = false;
+            hitSound.Play();
+            soundFXHit = false;
         }
 
-        if (soundfxnext = true)
+        if (soundFXNext)
         {
-            Next.Play();
-            soundfxnext = false;
+            nextSound.Play();
+            soundFXNext = false;
         }
     }
 }

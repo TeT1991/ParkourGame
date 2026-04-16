@@ -1,42 +1,37 @@
-using System.Collections;
-using System.Collections.Generic;
+// Scripts/mute.cs
 using UnityEngine;
 
 public class mute : MonoBehaviour
 {
+    [SerializeField] private GameObject muteIcon;
+    [SerializeField] private GameObject unmuteIcon;
 
-    public GameObject mutepng;
-    public GameObject mutepng1;
-    public void MuteToggl()
+    private const int MUTED = 1;
+    private const int UNMUTED = 0;
+
+    private void Start()
     {
-        PlayerPrefs.SetInt("mute",  0);
-        AudioListener.volume = 1;
-            mutepng.SetActive(true);
-            mutepng1.SetActive(false);
+        // Восстанавливаем состояние при загрузке сцены
+        ApplyMuteState(PlayerPrefs.GetInt("mute", UNMUTED));
     }
 
-    public void MuteToggl1()
+    public void SetUnmuted()
     {
-        PlayerPrefs.SetInt("mute", 1);
-        AudioListener.volume = 0;
-        mutepng.SetActive(false);
-        mutepng1.SetActive(true);
+        PlayerPrefs.SetInt("mute", UNMUTED);
+        ApplyMuteState(UNMUTED);
     }
 
-    private void Update()
+    public void SetMuted()
     {
-        if (PlayerPrefs.GetInt("mute") == 0)
-        {
-            AudioListener.volume = 1;
-            mutepng.SetActive(true);
-            mutepng1.SetActive(false);
-        }
+        PlayerPrefs.SetInt("mute", MUTED);
+        ApplyMuteState(MUTED);
+    }
 
-        if (PlayerPrefs.GetInt("mute") == 1)
-        {
-            AudioListener.volume = 0;
-            mutepng.SetActive(false);
-            mutepng1.SetActive(true);
-        }
+    private void ApplyMuteState(int state)
+    {
+        bool isMuted = state == MUTED;
+        AudioListener.volume = isMuted ? 0f : 1f;
+        muteIcon.SetActive(!isMuted);
+        unmuteIcon.SetActive(isMuted);
     }
 }

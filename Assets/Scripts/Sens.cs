@@ -1,18 +1,31 @@
+// Scripts/Sens.cs
 using UnityEngine;
 using UnityStandardAssets.Characters.FirstPerson;
-using UnityEngine.UI;
 
 public class Sens : MonoBehaviour
 {
-    public GameObject SenMenu;
-    public GameObject Player;
+    [SerializeField] private GameObject senMenu;
+    [SerializeField] private GameObject player;
 
-    private void Update()
+    private void Start()
     {
-        if (Input.GetKeyDown("escape"))
+        if (InputManager.Instance != null)
+            InputManager.Instance.OnPausePressed += CloseSensMenu;
+    }
+
+    private void OnDestroy()
+    {
+        if (InputManager.Instance != null)
+            InputManager.Instance.OnPausePressed -= CloseSensMenu;
+    }
+
+    private void CloseSensMenu()
+    {
+        senMenu.SetActive(false);
+        var fpc = player.GetComponent<FirstPersonController>();
+        if (fpc != null)
         {
-            SenMenu.SetActive(false);
-            Player.GetComponent<FirstPersonController>().enabled = true;
+            fpc.enabled = true;
             FirstPersonController.curlo = 0;
         }
     }

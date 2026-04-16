@@ -1,23 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
+// Scripts/Save.cs
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Save : MonoBehaviour
 {
-    void Start()
+    private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+
+        if (InputManager.Instance != null)
+            InputManager.Instance.OnBackPressed += ReturnToMenu;
     }
 
-    void Update()
+    private void OnDestroy()
     {
-        if (Input.GetKeyDown("backspace"))
-        {
-            GameDistribution.Instance.ShowAd();
-            Application.LoadLevel("Menu");
-            Cursor.lockState = CursorLockMode.Confined;
-        }
+        if (InputManager.Instance != null)
+            InputManager.Instance.OnBackPressed -= ReturnToMenu;
     }
 
+    private void ReturnToMenu()
+    {
+        AdsManager.Instance.ShowFullscreenAd();
+        Cursor.lockState = CursorLockMode.Confined;
+        SceneManager.LoadScene("Menu");
+    }
 }

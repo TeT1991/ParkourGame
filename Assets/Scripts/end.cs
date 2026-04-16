@@ -1,19 +1,21 @@
+// Scripts/end.cs
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class end : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private float delayBeforeMenu = 7f;
+
+    private void Start()
     {
-        StartCoroutine(ExampleCoroutine());
         Cursor.lockState = CursorLockMode.Confined;
+        StartCoroutine(LoadMenuAfterDelay());
     }
 
-    IEnumerator ExampleCoroutine()
+    private IEnumerator LoadMenuAfterDelay()
     {
-        yield return new WaitForSeconds(7);
-        Application.LoadLevel("Menu");
+        yield return new WaitForSeconds(delayBeforeMenu);
+        SceneManager.LoadScene("Menu");
     }
 }
