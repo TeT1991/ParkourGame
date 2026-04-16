@@ -6,25 +6,28 @@ using UnityEngine.SceneManagement;
 public class Next : MonoBehaviour
 {
     [SerializeField] private GameObject player;
-    [SerializeField] private GameObject nextFX;     // объект с именем "2"
-    [SerializeField] private GameObject fpsCamera;  // "FirstPersonCharacter"
+    [SerializeField] private GameObject nextFX;
+    [SerializeField] private GameObject fpsCamera;
 
     private void Start()
     {
-        player.SetActive(true);
-
-        if (nextFX == null) nextFX = GameObject.Find("2");
+        if (player == null) player = GameObject.FindWithTag("Player");
         if (fpsCamera == null) fpsCamera = GameObject.Find("FirstPersonCharacter");
 
-        nextFX.SetActive(false);
+        player.SetActive(true);
+
+        if (nextFX != null)
+            nextFX.SetActive(false);
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            nextFX.SetActive(true);
-            fpsCamera.SetActive(false);
+            if (nextFX != null)
+                nextFX.SetActive(true);
+
+            // ”брали fpsCamera.SetActive(false) Ч это ломало камеру на следующей сцене
             StartCoroutine(LoadNextScene());
         }
     }
