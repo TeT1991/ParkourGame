@@ -63,7 +63,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_Jumping = false;
             m_AudioSource = GetComponent<AudioSource>();
 			m_MouseLook.Init(transform , m_Camera.transform);
-            slider.value = PlayerPrefs.GetFloat("save", sliderValue);
+            //slider.value = PlayerPrefs.GetFloat("save", sliderValue);
         }
 
 
@@ -75,13 +75,18 @@ namespace UnityStandardAssets.Characters.FirstPerson
             //curlo = 1;
         }
 
-
+        public void SetSensitivity(float value)
+        {
+            m_MouseLook.XSensitivity = value;
+            m_MouseLook.YSensitivity = value;
+            PlayerPrefs.SetFloat("save", value);
+        }
 
         // Update is called once per frame
         private void Update()
         {
-            m_MouseLook.XSensitivity = slider.value;
-            m_MouseLook.YSensitivity = slider.value;
+            //m_MouseLook.XSensitivity = slider.value;
+            //m_MouseLook.YSensitivity = slider.value;
 
             RotateView();
             // the jump state needs to read here to make sure it is not missed

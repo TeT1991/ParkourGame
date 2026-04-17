@@ -27,9 +27,11 @@ public class InputManager : MonoBehaviour
 
     private void Update()
     {
-        // Клавиатура — ПК
         if (Input.GetKeyDown(KeyCode.Backspace))
+        {
+            Debug.Log("[InputManager] Backspace нажат. Подписчиков: " + (OnBackPressed?.GetInvocationList().Length ?? 0));
             OnBackPressed?.Invoke();
+        }
 
         if (Input.GetKeyDown(KeyCode.Escape))
             OnPausePressed?.Invoke();
