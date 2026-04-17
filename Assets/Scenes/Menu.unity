@@ -25481,7 +25481,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1788327468}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 185274600}
+        m_TargetAssemblyTypeName: InputManager, Assembly-CSharp
+        m_MethodName: OnBackButtonPressed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1788327468
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29980,6 +29992,10 @@ PrefabInstance:
     - target: {fileID: 1330179137625292370, guid: cdee3000ca0334145929d8eae0de0ed2, type: 3}
       propertyPath: m_Name
       value: MobileUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 1330179137625292370, guid: cdee3000ca0334145929d8eae0de0ed2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2552329813164876522, guid: cdee3000ca0334145929d8eae0de0ed2, type: 3}
       propertyPath: m_AnchoredPosition.x

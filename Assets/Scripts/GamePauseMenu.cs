@@ -28,6 +28,8 @@ public class GamePauseMenu : MonoBehaviour
     {
         if (Instance != null && Instance != this)
         {
+            if (hintsPCUI != null)
+                Destroy(hintsPCUI);
             Destroy(gameObject);
             return;
         }
@@ -165,10 +167,13 @@ public class GamePauseMenu : MonoBehaviour
 
     private bool IsMobile()
     {
+        if (MobileTouchInput.Instance != null)
+            return MobileTouchInput.Instance.IsMobile;
+
 #if UNITY_EDITOR
         return false;
 #else
-            return Input.touchSupported && SystemInfo.deviceType == DeviceType.Handheld;
+        return Input.touchSupported && SystemInfo.deviceType == DeviceType.Handheld;
 #endif
     }
 }

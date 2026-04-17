@@ -35,6 +35,9 @@ public class MobileTouchInput : MonoBehaviour
     {
         if (Instance != null && Instance != this)
         {
+            // ”ничтожаем дубликаты Ч и сам объект, и его mobileUI
+            if (mobileUI != null)
+                Destroy(mobileUI);
             Destroy(gameObject);
             return;
         }
@@ -59,10 +62,18 @@ public class MobileTouchInput : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (mobileUI == null) return;
+        if (mobileUI == null)
+        {
+            Debug.Log("[MobileTouchInput] mobileUI == null!");
+            return;
+        }
 
         bool isMenuScene = scene.name == "Menu";
-        mobileUI.SetActive(_isTouchDevice && !isMenuScene);
+        bool shouldShow = _isTouchDevice && !isMenuScene;
+
+        Debug.Log($"[MobileTouchInput] Scene: {scene.name}, isMenuScene: {isMenuScene}, _isTouchDevice: {_isTouchDevice}, shouldShow: {shouldShow}");
+
+        mobileUI.SetActive(shouldShow);
 
         _moveFingerID = -1;
         _lookFingerID = -1;
@@ -85,6 +96,10 @@ public class MobileTouchInput : MonoBehaviour
     private void Update()
     {
         if (!_isTouchDevice) return;
+
+        // Ќе обрабатываем касани€ во врем€ паузы
+        if (Time.timeScale == 0f) return;
+
         ProcessTouches();
     }
 
@@ -144,6 +159,7 @@ public class MobileTouchInput : MonoBehaviour
             }
         }
     }
+
 
     private void HandleMovement(Vector2 currentPos)
     {
