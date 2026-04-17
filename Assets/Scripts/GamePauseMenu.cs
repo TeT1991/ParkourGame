@@ -68,12 +68,17 @@ public class GamePauseMenu : MonoBehaviour
         if (_isPaused)
             Resume();
 
-        // На сцене меню курсор всегда разблокирован
         bool isMenuScene = scene.name == "Menu";
         if (isMenuScene)
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+        }
+        else
+        {
+            // На игровой сцене применяем сохранённую чувствительность к новому FirstPersonController
+            float saved = PlayerPrefs.GetFloat(SensKey, 0.1f);
+            ApplySensitivity(saved);
         }
     }
 
@@ -173,7 +178,7 @@ public class GamePauseMenu : MonoBehaviour
 #if UNITY_EDITOR
         return false;
 #else
-        return Input.touchSupported && SystemInfo.deviceType == DeviceType.Handheld;
+            return Input.touchSupported && SystemInfo.deviceType == DeviceType.Handheld;
 #endif
     }
 }
