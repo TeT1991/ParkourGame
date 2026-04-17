@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityStandardAssets.Characters.FirstPerson;
 
 public class Next : MonoBehaviour
 {
@@ -9,12 +10,15 @@ public class Next : MonoBehaviour
     [SerializeField] private GameObject nextFX;
     [SerializeField] private GameObject fpsCamera;
 
+    private bool _triggered = false;
+
     private void Start()
     {
         if (player == null) player = GameObject.FindWithTag("Player");
         if (fpsCamera == null) fpsCamera = GameObject.Find("FirstPersonCharacter");
 
-        player.SetActive(true);
+        if (player != null)
+            player.SetActive(true);
 
         if (nextFX != null)
             nextFX.SetActive(false);
@@ -22,12 +26,29 @@ public class Next : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (_triggered) return;
+
         if (other.CompareTag("Player"))
         {
+            _triggered = true;
+
+            var fpc = other.GetComponent<FirstPersonController>();
+            if (fpc != null) fpc.enabled = false;
+
+            var rb = other.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.velocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+            }
+
             if (nextFX != null)
                 nextFX.SetActive(true);
 
-            // ”брали fpsCamera.SetActive(false) Ч это ломало камеру на следующей сцене
+            // ќткрываем следующий уровень
+            int nextIndex = SceneManager.GetActiveScene().buildIndex + 1;
+            LevelProgress.MaxUnlockedLevel = nextIndex;
+
             StartCoroutine(LoadNextScene());
         }
     }
@@ -35,7 +56,8 @@ public class Next : MonoBehaviour
     private IEnumerator LoadNextScene()
     {
         yield return new WaitForSeconds(1f);
-        AdsManager.Instance.ShowFullscreenAd();
+        if (AdsManager.Instance != null)
+            AdsManager.Instance.ShowFullscreenAd();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }
